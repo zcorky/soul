@@ -1,6 +1,6 @@
 {
   "name": "@zcorky/soul",
-  "version": "1.0.0",
+  "version": "0.0.1-beta.1",
   "description": "Give a soul for your app.",
   "main": "lib/index.js",
   "repository": "https://github.com/zcorky/soul",
