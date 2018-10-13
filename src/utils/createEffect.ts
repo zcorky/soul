@@ -2,19 +2,23 @@ import { Action, Effect, Effects, Utils } from '../core/types';
 
 /**
  * one namespace
- * @param reducers in one namespace
- * @param initialState in one namespace
+ * @param namespace string
+ * @param effects in one namespace
  *
  * @example
  *  namespaceA
- *    before: { async +(s, a) => s, async -(s, a) => s }
- *    after: async (s, a) => s, type in (+, -)
+ *    before: { +: async (a, u) => any, -: async (a, u) => any }
+ *    after: async (a, u) => any
  */
-export function createEffect(effects: Effects<Action, Utils> = {}): Effect<Action, Utils> {
+export function createEffect(namespace: string, effects: Effects<Action, Utils> = {}): Effect<Action, Utils> {
   return async (action, utils) => {
     const effect = effects[action.type];
+    const extendsUtils = {
+      getState: async () => utils.getState()[namespace],
+    };
+
     if (effect) {
-      await effect(action, utils);
+      await effect(action, utils, extendsUtils);
     }
   }
 }

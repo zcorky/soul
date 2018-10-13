@@ -21,7 +21,7 @@ describe('create subscription', () => {
       getState: () => state,
     };
 
-    const subscription = createSubscription({
+    const subscription = createSubscription('app', {
       setup() {
         spy();
       },
@@ -39,7 +39,7 @@ describe('create subscription', () => {
   });
 
   it('should allow undefined', () => {
-    const subscription = createSubscription();
+    const subscription = createSubscription('app');
     expect(typeof subscription).to.equal('function');
   })
 });

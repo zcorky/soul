@@ -55,8 +55,8 @@ export class Soul implements ISoul {
 
       initialState[namespace] = model.state;
       reducers[namespace] = createReducer<typeof model.state>(model.reducers as Reducers<State, Action>, model.state);
-      effects[namespace] = createEffect(model.effects as Effects<Action, Utils>);
-      subscriptions[namespace] = createSubscription(model.subscriptions as Subscriptions<Utils>)
+      effects[namespace] = createEffect(namespace, model.effects as Effects<Action, Utils>);
+      subscriptions[namespace] = createSubscription(namespace, model.subscriptions as Subscriptions<MiddlewareAPI>);
     }
 
     const reducer = combineReducers(reducers);
@@ -74,7 +74,7 @@ export class Soul implements ISoul {
     const utils = this.getUtils();
 
     // run subscription
-    subscription(utils as Utils);
+    subscription(utils as MiddlewareAPI);
 
     return this;
   }
@@ -92,8 +92,8 @@ export class Soul implements ISoul {
     return {
       dispatch: store.dispatch,
       getState: store.getState,
-      put: async (action: Action) => store.dispatch(action),
-      select: async (fn) => typeof fn === 'function' ? fn(store.getState()) : store.getState(),
+      // put: async (action: Action) => store.dispatch(action),
+      // select: async (fn) => typeof fn === 'function' ? fn(store.getState()) : store.getState(),
     };
   }
 }

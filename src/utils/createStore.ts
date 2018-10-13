@@ -8,6 +8,8 @@ import {
   Middleware,
 } from 'redux';
 
+import { getUtils } from './getUtils';
+
 import { Action, Reducer, Effect, Utils } from '../core/types';
 
 export interface Plugins<S> {
@@ -16,10 +18,8 @@ export interface Plugins<S> {
 };
 
 export function applyEffect(effect: Effect): Middleware {
-  return middlewareAPI => {
-    const put = async (action) => middlewareAPI.dispatch(action);
-    const select = async (fn) => fn ? fn(middlewareAPI.getState()) : middlewareAPI.getState();
-    const utils = { ...middlewareAPI, put, select } as Utils;
+  return (middlewareAPI) => {
+    const utils: Utils = getUtils(middlewareAPI);
 
     return next => action => {
       effect(action, utils);

@@ -2,21 +2,25 @@ import { Subscriptions, MiddlewareAPI } from '../core/types';
 
 /**
  * one namespace
+ * @param namespace string
  * @param reducers in one namespace
- * @param initialState in one namespace
  *
  * @example
  *  namespaceA
- *    before: { async +(s, a) => s, async -(s, a) => s }
- *    after: async (s, a) => s, type in (+, -)
+ *    before: { async +(u) => any, async -(u) => any }
+ *    after: async (u) => any
  */
-export function createSubscription(subscriptions: Subscriptions<MiddlewareAPI> = {}) {
+export function createSubscription(namespace: string, subscriptions: Subscriptions<MiddlewareAPI> = {}) {
   return (middlewareAPI: MiddlewareAPI) => {
+    const extendsUtils = {
+      getState: async () => middlewareAPI.getState()[namespace],
+    };
+
     Object.keys(subscriptions)
       .forEach(async (key) => {
         const sub = subscriptions[key];
         if (typeof sub === 'function') {
-          await sub(middlewareAPI); // @TODO Middleware API
+          await sub(middlewareAPI, extendsUtils); // @TODO Middleware API
         }
       });
   }

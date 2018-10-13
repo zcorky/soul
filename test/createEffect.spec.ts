@@ -10,14 +10,14 @@ describe('create effect', () => {
     };
 
     const utils = {
-      dispatch: () => { state.value += 1; },
-      getState: () => state,
+      dispatch: async () => { state.value += 1; },
+      getState: async () => state,
       select: async () => state,
       put: async () => null,
-      getCurrentState: () => state,
+      delay: async () => null,
     };
 
-    const effect = createEffect({
+    const effect = createEffect('', {
       async '*+'(action, { dispatch }) {
         dispatch(action);
       },
@@ -30,12 +30,12 @@ describe('create effect', () => {
   });
 
   it('undefined', () => {
-    const reducer = createEffect(undefined as any as Effects<Action, {}>);
+    const reducer = createEffect('', undefined as any as Effects<Action, {}>);
     expect(typeof reducer).to.be.equal('function');
   });
 
   it('null', () => {
-    const reducer = createEffect(null as any as Effects<Action, {}>);
+    const reducer = createEffect('', null as any as Effects<Action, {}>);
     expect(typeof reducer).to.be.equal('function');
   });
 });
