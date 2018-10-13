@@ -49,7 +49,7 @@ export interface MiddlewareAPI {
 export interface Utils {
   // dispatch(action: Action): Promise<any>;
   // getState(): Promise<any>;
-  dispatch(action: Action): Action;
+  dispatch(action: Action): void;
   getState(): any;
   select(fn?: Function): Promise<any>;
   put(action: Action): Promise<any>;

@@ -10,11 +10,13 @@ describe('create effect', () => {
     };
 
     const utils = {
-      dispatch: async () => { state.value += 1; },
-      getState: async () => state,
+      dispatch: () => { state.value += 1; },
+      getState: () => state,
       select: async () => state,
       put: async () => null,
       delay: async () => null,
+      call: async () => null,
+      race: async () => null,
     };
 
     const effect = createEffect('', {
