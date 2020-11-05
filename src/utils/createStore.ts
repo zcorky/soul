@@ -58,5 +58,5 @@ export function createStore<S = {}>(options: CreateStoreOptions<S>): Store<S, Ac
     ...extraEnhancers,
   ];
 
-  return reduxCreateStore(reducer, initialState, compose(...enhancers));
+  return reduxCreateStore(reducer, initialState as any, compose(...enhancers));
 }

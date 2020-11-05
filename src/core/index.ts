@@ -20,8 +20,9 @@ export {
 
 export interface ISoul {
   model(_model: Model): void;
-  dispatch(action: Action): void;
   getState(): any;
+  subscribe(listener: () => void): void;
+  dispatch(action: Action): void;
   start(): void;
 }
 
@@ -33,7 +34,7 @@ export interface ISoul {
 
 export class Soul implements ISoul {
   private models: Models = {};
-  private store: Store;
+  public _store: Store;
 
   public model<S>(_model: Model) {
     assert(_model.namespace, '[Model] namespace should be defined.');
@@ -43,7 +44,7 @@ export class Soul implements ISoul {
     return this;
   }
 
-  public start() {
+  private create() {
     const initialState = {};
     const reducers: ReducersMapObject = {};
     const effects: EffectsMapObject = {};
@@ -63,7 +64,7 @@ export class Soul implements ISoul {
     const effect = combineEffects(effects);
     const subscription = combineSubscriptions(subscriptions);
 
-    this.store = createStore({
+    this._store = createStore({
       initialState,
       reducer,
       effect,
@@ -75,20 +76,34 @@ export class Soul implements ISoul {
 
     // run subscription
     subscription(utils as MiddlewareAPI);
+    
+    return {
+      utils,
+      subscription,
+    };
+  }
+
+  public start() {
+    this.create();
 
     return this;
   }
-
-  public dispatch(action: Action) {
-    return this.store.dispatch(action);
+  
+  public getState() {
+    return this._store.getState();
   }
 
-  public getState() {
-    return this.store.getState();
+  public subscribe(listener: () => void) {
+    return this._store.subscribe(listener);
+  }
+
+  public dispatch(action: Action) {
+    return this._store.dispatch(action);
   }
 
   private getUtils() {
-    const store = this.store;
+    const store = this._store;
+    
     return {
       dispatch: store.dispatch,
       getState: store.getState,
