@@ -46,7 +46,7 @@ app.model({
 		async 'sync'(action, { put }) {
 			const { total, user } = await syncUserService();
 			await put({ type: 'user/save', payload: { total, user } });
-		};
+		},
 	},
 });
 
